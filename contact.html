@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Zerano</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+        .page-subtitle {
+            color: var(--color-accent);
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .contact-layout {
+            display: grid;
+            gap: 6rem;
+            padding-bottom: 8rem;
+        }
+        @media (min-width: 900px) {
+            .contact-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .contact-info {
+            max-width: 500px;
+        }
+        .contact-heading {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-family: var(--font-serif);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+        .contact-text {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .contact-item h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+        .contact-item p {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .contact-form {
+            background-color: var(--color-gray-50);
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-muted);
+        }
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--color-gray-100);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            font-size: 0.875rem;
+            transition: border-color var(--transition-fast);
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="header__logo">Zerano</a>
+            <nav class="header__nav" aria-label="Main Navigation">
+                <ul class="header__nav-list">
+                    <li class="has-megamenu">
+                        <a href="products.html" class="header__nav-link">Shop</a>
+                        <div class="megamenu">
+                            <div class="container megamenu__container">
+                                <div class="megamenu__sidebar">
+                                    <ul class="megamenu__categories">
+                                        <li>
+                                            <a href="products.html" class="active">
+                                                Wallets
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Bags
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Belts
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Accessories
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                All Products
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="megamenu__content">
+                                    <div class="megamenu__grid">
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Slim Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Slim Wallet</h4>
+                                            <p class="megamenu__product-price">$65.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Cardholder" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Cardholder</h4>
+                                            <p class="megamenu__product-price">$45.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Folio Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Folio Wallet</h4>
+                                            <p class="megamenu__product-price">$95.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Bifold Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Bifold Wallet</h4>
+                                            <p class="megamenu__product-price">$85.00</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="header__nav-link">About</a></li>
+                    <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <a href="#cart" class="header__action-link">Cart (0)</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <h1 class="page-title"><span class="font-serif italic text-muted">Get in</span> <span class="accent-color">Touch</span><span class="dot">.</span></h1>
+                <p class="page-subtitle">We reply within 24 hours</p>
+            </div>
+        </div>
+
+        <section class="container contact-layout">
+            <div class="contact-info">
+                <h2 class="contact-heading">Something begins <span class="font-serif italic text-muted">with a</span> <span class="accent-color font-serif italic">conversation</span><span class="dot">.</span></h2>
+                <p class="contact-text">Whether you have a question about our materials, a custom request, or need help with a lifetime repair, our team is always ready to assist you.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <h4>Studio</h4>
+                        <p>123 Craftsman Alley<br>Barcelona, Spain 08001</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Email Us</h4>
+                        <p>hello@zerano.com<br>support@zerano.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Call Us</h4>
+                        <p>+34 93 123 4567<br>Mon-Fri, 9am - 6pm CET</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" id="subject" class="form-control" placeholder="How can we help?">
+                </div>
+                <div class="form-group">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" class="form-control" placeholder="Tell us what you are working on..."></textarea>
+                </div>
+                <button type="button" class="btn btn--primary btn-submit">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <!-- Brand -->
+                <div class="footer__brand">
+                    <a href="index.html" class="footer__logo">Zerano</a>
+                    <p class="footer__desc">Premium leather goods designed for longevity and minimal aesthetic. Built for the modern journey.</p>
+                </div>
+                
+                <!-- Links -->
+                <nav class="footer__nav" aria-label="Footer Shop Links">
+                    <h3 class="footer__title">Shop</h3>
+                    <ul class="footer__list">
+                        <li><a href="products.html">Wallets</a></li>
+                        <li><a href="products.html">Bags</a></li>
+                        <li><a href="products.html">Belts</a></li>
+                        <li><a href="products.html">Accessories</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer About Links">
+                    <h3 class="footer__title">About</h3>
+                    <ul class="footer__list">
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html">Craftsmanship</a></li>
+                        <li><a href="about.html">Sustainability</a></li>
+                        <li><a href="about.html">Journal</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer Support Links">
+                    <h3 class="footer__title">Support</h3>
+                    <ul class="footer__list">
+                        <li><a href="contact.html">FAQ</a></li>
+                        <li><a href="contact.html">Shipping</a></li>
+                        <li><a href="contact.html">Returns</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2026 Zerano Leather. All rights reserved.</p>
+                <div class="footer__socials">
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="Twitter">Twitter</a>
+                    <a href="#" aria-label="Pinterest">Pinterest</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

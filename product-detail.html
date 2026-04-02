@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential Slim Wallet | Zerano</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .product-detail {
+            padding: 8rem 0;
+            display: grid;
+            gap: 4rem;
+        }
+        @media (min-width: 900px) {
+            .product-detail {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .product-gallery {
+            position: relative;
+        }
+        .product-gallery__main {
+            aspect-ratio: 4/5;
+            background-color: var(--color-gray-50);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .product-gallery__main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+        .product-gallery__thumbs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        .product-gallery__thumb {
+            aspect-ratio: 1;
+            background-color: var(--color-gray-50);
+            cursor: pointer;
+            transition: opacity var(--transition-fast);
+        }
+        .product-gallery__thumb:hover {
+            opacity: 0.7;
+        }
+        .product-gallery__thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+        .product-info {
+            position: sticky;
+            top: 7rem;
+            align-self: start;
+        }
+        .product-info__title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-family: var(--font-serif);
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+        .product-info__price {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+        }
+        .product-info__desc {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+        .product-form {
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .btn-add {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 0.875rem;
+        }
+        .product-features__item {
+            margin-bottom: 1.5rem;
+        }
+        .product-features__title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+        }
+        .product-features__text {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="header__logo">Zerano</a>
+            <nav class="header__nav" aria-label="Main Navigation">
+                <ul class="header__nav-list">
+                    <li class="has-megamenu">
+                        <a href="products.html" class="header__nav-link">Shop</a>
+                        <div class="megamenu">
+                            <div class="container megamenu__container">
+                                <div class="megamenu__sidebar">
+                                    <ul class="megamenu__categories">
+                                        <li>
+                                            <a href="products.html" class="active">
+                                                Wallets
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Bags
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Belts
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Accessories
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                All Products
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="megamenu__content">
+                                    <div class="megamenu__grid">
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Slim Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Slim Wallet</h4>
+                                            <p class="megamenu__product-price">$65.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Cardholder" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Cardholder</h4>
+                                            <p class="megamenu__product-price">$45.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Folio Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Folio Wallet</h4>
+                                            <p class="megamenu__product-price">$95.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Bifold Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Bifold Wallet</h4>
+                                            <p class="megamenu__product-price">$85.00</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="header__nav-link">About</a></li>
+                    <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <a href="#cart" class="header__action-link">Cart (0)</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container product-detail">
+            <!-- Left: Gallery -->
+            <div class="product-gallery">
+                <div class="product-gallery__main">
+                    <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=800&auto=format&fit=crop" alt="Essential Slim Wallet">
+                </div>
+                <div class="product-gallery__thumbs">
+                    <div class="product-gallery__thumb">
+                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=400&auto=format&fit=crop" alt="Thumb 1">
+                    </div>
+                    <div class="product-gallery__thumb">
+                        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=400&auto=format&fit=crop" alt="Thumb 2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Info -->
+            <div class="product-info">
+                <h1 class="product-info__title">Essential Slim Wallet</h1>
+                <p class="product-info__price">$65.00</p>
+                
+                <div class="product-info__desc">
+                    <p>Designed for the minimalist, the Essential Slim Wallet holds your core cards and cash without adding bulk. Hand-stitched from premium full-grain Italian leather, it will develop a unique patina over time.</p>
+                </div>
+
+                <form class="product-form">
+                    <button type="button" class="btn btn--primary btn-add">Add to Cart - $65.00</button>
+                </form>
+
+                <div class="product-features">
+                    <div class="product-features__item">
+                        <h4 class="product-features__title">Details</h4>
+                        <p class="product-features__text">Holds 4-6 cards and half-folded bills. Hand-burnished edges. Comes in a signature presentation box.</p>
+                    </div>
+                    <div class="product-features__item">
+                        <h4 class="product-features__title">Material</h4>
+                        <p class="product-features__text">100% vegetable-tanned full-grain leather. Industrial-grade nylon stitching.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="products section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">You Might <span class="font-serif italic text-muted">Also</span> <span class="accent-color font-serif italic">Like</span></h2>
+                </div>
+                
+                <div class="products__grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <!-- Reuse product card HTML -->
+                    <article class="product-card">
+                        <a href="product-detail.html" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=600&auto=format&fit=crop" alt="The Weekender Bag" class="product-card__image" loading="lazy">
+                            </div>
+                            <div class="product-card__info">
+                                <h3 class="product-card__title">The Weekender</h3>
+                                <p class="product-card__price">$345.00</p>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="product-card">
+                        <a href="product-detail.html" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop" alt="Classic Leather Belt" class="product-card__image" loading="lazy">
+                            </div>
+                            <div class="product-card__info">
+                                <h3 class="product-card__title">Classic Leather Belt</h3>
+                                <p class="product-card__price">$85.00</p>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <!-- Brand -->
+                <div class="footer__brand">
+                    <a href="index.html" class="footer__logo">Zerano</a>
+                    <p class="footer__desc">Premium leather goods designed for longevity and minimal aesthetic. Built for the modern journey.</p>
+                </div>
+                
+                <!-- Links -->
+                <nav class="footer__nav" aria-label="Footer Shop Links">
+                    <h3 class="footer__title">Shop</h3>
+                    <ul class="footer__list">
+                        <li><a href="products.html">Wallets</a></li>
+                        <li><a href="products.html">Bags</a></li>
+                        <li><a href="products.html">Belts</a></li>
+                        <li><a href="products.html">Accessories</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer About Links">
+                    <h3 class="footer__title">About</h3>
+                    <ul class="footer__list">
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html">Craftsmanship</a></li>
+                        <li><a href="about.html">Sustainability</a></li>
+                        <li><a href="about.html">Journal</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer Support Links">
+                    <h3 class="footer__title">Support</h3>
+                    <ul class="footer__list">
+                        <li><a href="contact.html">FAQ</a></li>
+                        <li><a href="contact.html">Shipping</a></li>
+                        <li><a href="contact.html">Returns</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2026 Zerano Leather. All rights reserved.</p>
+                <div class="footer__socials">
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="Twitter">Twitter</a>
+                    <a href="#" aria-label="Pinterest">Pinterest</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

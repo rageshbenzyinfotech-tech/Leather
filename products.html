@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Collection | Zerano</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+        .page-subtitle {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .shop-layout {
+            display: grid;
+            gap: 4rem;
+            padding-bottom: 8rem;
+        }
+        @media (min-width: 992px) {
+            .shop-layout {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+        .filters {
+            position: sticky;
+            top: 7rem;
+        }
+        .filter-group {
+            margin-bottom: 2rem;
+        }
+        .filter-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+        .filter-list li {
+            margin-bottom: 0.75rem;
+        }
+        .filter-list a {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            transition: color var(--transition-fast);
+        }
+        .filter-list a:hover {
+            color: var(--color-text);
+        }
+        .filter-list a.active {
+            color: var(--color-accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. Header / Navbar -->
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="header__logo">Zerano</a>
+            <nav class="header__nav" aria-label="Main Navigation">
+                <ul class="header__nav-list">
+                    <li class="has-megamenu">
+                        <a href="products.html" class="header__nav-link">Shop</a>
+                        <div class="megamenu">
+                            <div class="container megamenu__container">
+                                <div class="megamenu__sidebar">
+                                    <ul class="megamenu__categories">
+                                        <li>
+                                            <a href="products.html" class="active">
+                                                Wallets
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Bags
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Belts
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                Accessories
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="products.html">
+                                                All Products
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="megamenu__content">
+                                    <div class="megamenu__grid">
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Slim Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Slim Wallet</h4>
+                                            <p class="megamenu__product-price">$65.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Cardholder" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Cardholder</h4>
+                                            <p class="megamenu__product-price">$45.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Folio Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Folio Wallet</h4>
+                                            <p class="megamenu__product-price">$95.00</p>
+                                        </a>
+                                        <a href="product-detail.html" class="megamenu__product">
+                                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Bifold Wallet" class="megamenu__product-image">
+                                            <h4 class="megamenu__product-title">Bifold Wallet</h4>
+                                            <p class="megamenu__product-price">$85.00</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="header__nav-link">About</a></li>
+                    <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <a href="#cart" class="header__action-link">Cart (0)</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <h1 class="page-title">The <span class="font-serif italic text-muted">Core</span> <span class="accent-color font-serif italic">Collection</span><span class="dot">.</span></h1>
+                <p class="page-subtitle">Premium Leather Goods</p>
+            </div>
+        </div>
+
+        <section class="container shop-layout">
+            <!-- Sidebar -->
+            <aside class="filters">
+                <div class="filter-group">
+                    <h3 class="filter-title">Category</h3>
+                    <ul class="filter-list" id="category-filters">
+                        <li><a href="#" class="active" data-filter="all">All Products</a></li>
+                        <li><a href="#" data-filter="wallets">Wallets</a></li>
+                        <li><a href="#" data-filter="bags">Bags</a></li>
+                        <li><a href="#" data-filter="belts">Belts</a></li>
+                        <li><a href="#" data-filter="accessories">Accessories</a></li>
+                    </ul>
+                </div>
+
+                <div class="filter-group" style="margin-top: 3rem;">
+                    <h3 class="filter-title">Sort By</h3>
+                    <ul class="filter-list" id="sort-filters">
+                        <li><a href="#" class="active" data-sort="default">Featured</a></li>
+                        <li><a href="#" data-sort="price-asc">Price: Low to High</a></li>
+                        <li><a href="#" data-sort="price-desc">Price: High to Low</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="products__grid">
+                <!-- Product 1 -->
+                <article class="product-card" data-category="wallets accessories" data-price="65">
+                    <a href="product-detail.html" class="product-card__link">
+                        <div class="product-card__image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=600&auto=format&fit=crop" alt="Essential Slim Wallet" class="product-card__image" loading="lazy">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__title">Essential Slim Wallet</h3>
+                            <p class="product-card__price">$65.00</p>
+                            <div class="product-card__colors">
+                                <span class="swatch swatch--black is-active"></span>
+                                <span class="swatch swatch--brown"></span>
+                                <span class="swatch swatch--tan"></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                
+                <!-- Product 2 -->
+                <article class="product-card" data-category="bags" data-price="345">
+                    <a href="product-detail.html" class="product-card__link">
+                        <div class="product-card__image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=600&auto=format&fit=crop" alt="The Weekender Bag" class="product-card__image" loading="lazy">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__title">The Weekender</h3>
+                            <p class="product-card__price">$345.00</p>
+                            <div class="product-card__colors">
+                                <span class="swatch swatch--brown is-active"></span>
+                                <span class="swatch swatch--black"></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                
+                <!-- Product 3 -->
+                <article class="product-card" data-category="belts accessories" data-price="85">
+                    <a href="product-detail.html" class="product-card__link">
+                        <div class="product-card__image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop" alt="Classic Leather Belt" class="product-card__image" loading="lazy">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__title">Classic Leather Belt</h3>
+                            <p class="product-card__price">$85.00</p>
+                            <div class="product-card__colors">
+                                <span class="swatch swatch--black is-active"></span>
+                                <span class="swatch swatch--tan"></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                
+                <!-- Product 4 -->
+                <article class="product-card" data-category="wallets accessories" data-price="45">
+                    <a href="product-detail.html" class="product-card__link">
+                        <div class="product-card__image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1628149462153-29ecda955685?q=80&w=600&auto=format&fit=crop" alt="Minimalist Cardholder" class="product-card__image" loading="lazy">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__title">Minimalist Cardholder</h3>
+                            <p class="product-card__price">$45.00</p>
+                            <div class="product-card__colors">
+                                <span class="swatch swatch--tan is-active"></span>
+                                <span class="swatch swatch--black"></span>
+                                <span class="swatch swatch--maroon"></span>
+                                <span class="swatch swatch--dual"></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <!-- Brand -->
+                <div class="footer__brand">
+                    <a href="index.html" class="footer__logo">Zerano</a>
+                    <p class="footer__desc">Premium leather goods designed for longevity and minimal aesthetic. Built for the modern journey.</p>
+                </div>
+                
+                <!-- Links -->
+                <nav class="footer__nav" aria-label="Footer Shop Links">
+                    <h3 class="footer__title">Shop</h3>
+                    <ul class="footer__list">
+                        <li><a href="products.html">Wallets</a></li>
+                        <li><a href="products.html">Bags</a></li>
+                        <li><a href="products.html">Belts</a></li>
+                        <li><a href="products.html">Accessories</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer About Links">
+                    <h3 class="footer__title">About</h3>
+                    <ul class="footer__list">
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html">Craftsmanship</a></li>
+                        <li><a href="about.html">Sustainability</a></li>
+                        <li><a href="about.html">Journal</a></li>
+                    </ul>
+                </nav>
+                
+                <nav class="footer__nav" aria-label="Footer Support Links">
+                    <h3 class="footer__title">Support</h3>
+                    <ul class="footer__list">
+                        <li><a href="contact.html">FAQ</a></li>
+                        <li><a href="contact.html">Shipping</a></li>
+                        <li><a href="contact.html">Returns</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2026 Zerano Leather. All rights reserved.</p>
+                <div class="footer__socials">
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="Twitter">Twitter</a>
+                    <a href="#" aria-label="Pinterest">Pinterest</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Filter and Sorting Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsGrid = document.querySelector('.products__grid');
+            const products = Array.from(document.querySelectorAll('.product-card'));
+            
+            const categoryLinks = document.querySelectorAll('#category-filters a');
+            const sortLinks = document.querySelectorAll('#sort-filters a');
+
+            let currentFilter = 'all';
+            let currentSort = 'default';
+
+            function renderProducts() {
+                // Filter
+                let filtered = products.filter(p => {
+                    return currentFilter === 'all' || p.dataset.category.includes(currentFilter);
+                });
+
+                // Sort
+                if (currentSort === 'price-asc') {
+                    filtered.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+                } else if (currentSort === 'price-desc') {
+                    filtered.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+                } else {
+                    // Default sort mapped back to original DOM order
+                    filtered.sort((a, b) => products.indexOf(a) - products.indexOf(b));
+                }
+
+                // Render matching cards
+                productsGrid.innerHTML = '';
+                filtered.forEach(p => productsGrid.appendChild(p));
+            }
+
+            categoryLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    categoryLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    currentFilter = link.dataset.filter;
+                    renderProducts();
+                });
+            });
+
+            sortLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sortLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    currentSort = link.dataset.sort;
+                    renderProducts();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

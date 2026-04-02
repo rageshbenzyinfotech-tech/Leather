@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Checkout - Zerano | Premium minimalist leather goods.">
+    <title>Checkout | Zerano</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Simplified Header for Checkout -->
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="header__logo">Zerano</a>
+            <a href="cart.html" class="header__action-link">Back to Cart</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="checkout-layout">
+                
+                <!-- Left Column: Forms -->
+                <div class="checkout-forms">
+                    
+                    <!-- Contact Section -->
+                    <section class="checkout__section">
+                        <h2 class="checkout__section-title">
+                            Contact
+                            <a href="#" class="checkout__login-link">Sign in</a>
+                        </h2>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Email" aria-label="Email">
+                            <label class="form-checkbox-group">
+                                <input type="checkbox" class="form-checkbox">
+                                Email me with news and offers
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Delivery Section -->
+                    <section class="checkout__section">
+                        <h2 class="checkout__section-title">Delivery</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <select class="form-select" aria-label="Country/Region">
+                                    <option value="ZA">South Africa</option>
+                                    <option value="US">United States</option>
+                                    <option value="UK">United Kingdom</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-grid form-grid--2col">
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="First name" aria-label="First name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="Last name" aria-label="Last name">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Company (optional)" aria-label="Company">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Address" aria-label="Address">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Apartment, suite, etc. (optional)" aria-label="Apartment">
+                            </div>
+
+                            <div class="form-grid form-grid--3col">
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="Suburb" aria-label="Suburb">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-select" aria-label="Province">
+                                        <option value="" disabled selected>Province</option>
+                                        <option value="GP">Gauteng</option>
+                                        <option value="WC">Western Cape</option>
+                                        <option value="KZN">KwaZulu-Natal</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="Postcode" aria-label="Postcode">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="tel" class="form-input" placeholder="Phone" aria-label="Phone">
+                            </div>
+
+                            <label class="form-checkbox-group">
+                                <input type="checkbox" class="form-checkbox">
+                                Save this information for next time
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Shipping Method -->
+                    <section class="checkout__section">
+                        <h2 class="checkout__section-title">Shipping method</h2>
+                        <div class="info-box">
+                            Enter your shipping address to view available shipping methods.
+                        </div>
+                    </section>
+
+                    <button class="btn btn--primary btn--large" style="width: 100%;">Continue to Payment</button>
+                </div>
+
+                <!-- Right Column: Summary -->
+                <aside class="checkout-summary">
+                    <div class="checkout-items">
+                        <!-- Item 1 -->
+                        <div class="checkout-item">
+                            <div class="checkout-item__image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=200&auto=format&fit=crop" alt="Essential Slim Wallet" class="checkout-item__image">
+                                <span class="checkout-item__quantity">1</span>
+                            </div>
+                            <div class="checkout-item__info">
+                                <h3 class="checkout-item__title">Essential Slim Wallet</h3>
+                                <p class="checkout-item__price">$65.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="discount-group">
+                        <input type="text" class="form-input" placeholder="Discount code" aria-label="Discount code">
+                        <button class="btn btn--outline">Apply</button>
+                    </div>
+
+                    <div class="checkout-totals">
+                        <div class="checkout-total-line">
+                            <span>Subtotal</span>
+                            <span>$65.00</span>
+                        </div>
+                        <div class="checkout-total-line">
+                            <span>Shipping</span>
+                            <span>Calculated at next step</span>
+                        </div>
+                        <div class="checkout-total-line checkout-total-line--final">
+                            <span class="total-label">Total</span>
+                            <div class="total-amount">
+                                <span class="currency-code">USD</span>
+                                <span>$65.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__bottom" style="border: none; padding: 0;">
+                <p>&copy; 2026 Zerano Leather. All rights reserved.</p>
+                <div class="footer__socials">
+                    <a href="#">Refund policy</a>
+                    <a href="#">Shipping policy</a>
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms of service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
