@@ -1,0 +1,125 @@
+.cart-layout {
+  display: grid;
+  gap: 4rem;
+  padding-bottom: 8rem;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-weight: 500;
+}
+
+.cart-table td {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: middle;
+}
+
+.cart-product {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.cart-product__image {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.cart-product__title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cart-product__remove {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cart-quantity {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.cart-quantity__btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cart-quantity__input {
+  width: 2rem;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  text-align: center;
+  font-size: 0.875rem;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.cart-summary {
+  background-color: var(--color-gray-50);
+  padding: 2rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.cart-summary__title {
+  font-size: 1.25rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.cart-summary__line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+.cart-summary__line span:last-child {
+  color: var(--color-text);
+}
+
+.cart-summary__total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (min-width: 992px) {
+  .cart-layout {
+    grid-template-columns: 2fr 1fr;
+  }
+}

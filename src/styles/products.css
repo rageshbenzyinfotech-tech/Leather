@@ -1,0 +1,121 @@
+.products__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem 1.5rem;
+}
+
+.product-card {
+  position: relative;
+}
+
+.product-card__link {
+  display: block;
+}
+
+.product-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background-color: var(--color-gray-50);
+}
+
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.85;
+}
+
+.product-card__link:hover .product-card__image {
+  transform: scale(1.04);
+  opacity: 1;
+}
+
+.product-card__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3px;
+  flex-direction: column;
+}
+
+.product-card__title {
+  font-size: 1rem;
+  font-weight: 400;
+  transition: color var(--transition-fast);
+}
+
+.product-card__price {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.product-card__colors {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 576px) {
+  .products__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .products__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.shop-layout {
+  display: grid;
+  gap: 4rem;
+  padding-bottom: 8rem;
+}
+
+@media (min-width: 992px) {
+  .shop-layout {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+.filters {
+  position: sticky;
+  top: 7rem;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+
+.filter-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.filter-list li {
+  margin-bottom: 0.75rem;
+}
+
+.filter-list a {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  transition: color var(--transition-fast);
+}
+
+.filter-list a:hover {
+  color: var(--color-text);
+}
+
+.filter-list a.active {
+  color: var(--color-accent);
+}
