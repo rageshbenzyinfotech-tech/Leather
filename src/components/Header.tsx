@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useStore } from '@/context/StoreContext';
+import LoginModal from '@/components/LoginModal';
 
 export default function Header() {
   const [cartOpen, setCartOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const { cart, wishlist, removeFromCart, cartTotal, cartCount } = useStore();
 
   return (
@@ -91,6 +93,13 @@ export default function Header() {
           </Link>
           <button 
             className="header__action-link" 
+            style={{ marginRight: '1rem' }}
+            onClick={() => setLoginOpen(true)}
+          >
+            Login
+          </button>
+          <button 
+            className="header__action-link" 
             id="cart-toggle"
             onClick={() => setCartOpen(!cartOpen)}
           >
@@ -130,6 +139,7 @@ export default function Header() {
           </div>
         </div>
       </div>
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 }
