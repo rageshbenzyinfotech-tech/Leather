@@ -11,7 +11,7 @@ type Product = {
   quantity?: number;
 };
 
-type CartItem = Product & { quantity: number };
+type CartItem = Product & { quantity: number, cart_item_id?: string };
 
 type User = {
   id: string;
@@ -83,6 +83,34 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const fetchCart = async () => {
+    try {
+      const res = await fetch('/api/cart');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.cart && data.cart.items) {
+          const dbCart = data.cart.items.map((item: any) => ({
+            id: item.product.id,
+            title: item.product.name,
+            price: item.product.discount_price ?? item.product.price,
+            image: Array.isArray(item.product.images) ? item.product.images[0] : JSON.parse(item.product.images as string)[0],
+            quantity: item.quantity,
+            cart_item_id: item.id
+          }));
+          setCart(dbCart);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    }
+  }, [user]);
+
   const login = async (email: string, password: string) => {
     try {
       const res = await fetch('/api/auth/login', {
@@ -128,7 +156,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = async (product: Product, quantity: number = 1) => {
+    // Optimistic update
     setCart((prev) => {
       const existingIndex = prev.findIndex((item) => item.id === product.id && item.color === product.color);
       if (existingIndex > -1) {
@@ -138,30 +167,104 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...product, quantity }];
     });
+
+    // If user is logged in, sync with DB
+    if (user) {
+      try {
+        await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_id: product.id, quantity }),
+        });
+        // We might want to re-fetch to get the cart_item_id from DB
+        fetchCart();
+      } catch (error) {
+        console.error('Error adding to DB cart:', error);
+      }
+    }
   };
 
-  const removeFromCart = (cartId: string) => {
-    setCart((prev) => prev.filter((item, i) => i.toString() !== cartId && `${item.id}-${item.color}` !== cartId));
+  const removeFromCart = async (cartId: string) => {
+    const itemToRemove = cart.find((item, i) => 
+      i.toString() === cartId || 
+      item.id === cartId || 
+      `${item.id}-${item.color}` === cartId || 
+      item.cart_item_id === cartId
+    );
+    
+    setCart((prev) => prev.filter((item, i) => 
+      i.toString() !== cartId && 
+      item.id !== cartId && 
+      `${item.id}-${item.color}` !== cartId && 
+      item.cart_item_id !== cartId
+    ));
+
+    if (user && itemToRemove?.cart_item_id) {
+      try {
+        await fetch('/api/cart/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cart_item_id: itemToRemove.cart_item_id }),
+        });
+      } catch (error) {
+        console.error('Error removing from DB cart:', error);
+      }
+    }
   };
 
-  const updateQuantity = (cartId: string, quantity: number) => {
+  const updateQuantity = async (cartId: string, quantity: number) => {
+    let affectedItem: CartItem | undefined;
+    
     setCart((prev) => {
-      const existingIndex = prev.findIndex((item, i) => i.toString() === cartId || `${item.id}-${item.color}` === cartId);
+      const existingIndex = prev.findIndex((item, i) => 
+        i.toString() === cartId || 
+        item.id === cartId || 
+        `${item.id}-${item.color}` === cartId || 
+        item.cart_item_id === cartId
+      );
       if (existingIndex > -1) {
         const newCart = [...prev];
-        newCart[existingIndex].quantity += quantity;
-        if (newCart[existingIndex].quantity <= 0) {
+        const updatedItem = { ...newCart[existingIndex] };
+        updatedItem.quantity += quantity;
+        newCart[existingIndex] = updatedItem;
+        affectedItem = updatedItem;
+        
+        if (updatedItem.quantity <= 0) {
           newCart.splice(existingIndex, 1);
         }
         return newCart;
       }
       return prev;
     });
+
+    if (user && affectedItem?.cart_item_id) {
+      try {
+        const newQuantity = affectedItem.quantity;
+        await fetch('/api/cart/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            cart_item_id: affectedItem.cart_item_id, 
+            quantity: newQuantity 
+          }),
+        });
+      } catch (error) {
+        console.error('Error updating DB cart:', error);
+      }
+    }
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
     setCart([]);
     localStorage.removeItem('zerano_cart_next');
+
+    if (user) {
+      try {
+        await fetch('/api/cart', { method: 'DELETE' });
+      } catch (error) {
+        console.error('Error clearing DB cart:', error);
+      }
+    }
   };
 
   const toggleWishlist = (product: Product) => {

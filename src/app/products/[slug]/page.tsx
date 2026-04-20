@@ -78,7 +78,7 @@ export default function ProductDetailPage() {
           >
             <img 
               src={mainImage} 
-              alt={product.title} 
+              alt={product.name} 
               style={{ 
                 transform: isZoomed ? 'scale(2)' : 'scale(1)', 
                 transformOrigin: zoomOrigin, 
@@ -108,14 +108,17 @@ export default function ProductDetailPage() {
 
         <div className="product-info" style={{ fontFamily: 'var(--font-sans)', color: 'var(--color-text)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 400, textTransform: 'uppercase', marginBottom: 0, fontFamily: 'var(--font-serif)' }}>{product.title}</h1>
+            <h1 style={{ fontSize: '2rem', fontWeight: 400, textTransform: 'uppercase', marginBottom: 0, fontFamily: 'var(--font-serif)' }}>{product.name}</h1>
           </div>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-              <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>₹{product.price.toLocaleString('en-IN')}</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>₹{(product.discount_price ?? product.price).toLocaleString('en-IN')}</p>
               {product.discount_price && (
-                <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', textDecoration: 'line-through' }}>₹{product.discount_price.toLocaleString('en-IN')}</p>
+                <>
+                  <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', textDecoration: 'line-through' }}>₹{product.price.toLocaleString('en-IN')}</p>
+                  <p style={{ fontSize: '1rem', color: '#ff4d4d', fontWeight: '600' }}>({Math.round(((product.price - product.discount_price) / product.price) * 100)}% OFF)</p>
+                </>
               )}
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -142,11 +145,11 @@ export default function ProductDetailPage() {
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
               <span>Unit Price</span>
-              <span>₹{(product.discount_price || product.price).toLocaleString('en-IN')}</span>
+              <span>₹{(product.discount_price ?? product.price).toLocaleString('en-IN')}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.25rem', fontWeight: 'bold' }}>
               <span>Total</span>
-              <span>₹{((product.discount_price || product.price) * quantity).toLocaleString('en-IN')}</span>
+              <span>₹{((product.discount_price ?? product.price) * quantity).toLocaleString('en-IN')}</span>
             </div>
           </div>
 
@@ -171,7 +174,7 @@ export default function ProductDetailPage() {
               className="btn" 
               disabled={product.stock <= 0}
               style={{ flex: 1, backgroundColor: product.stock > 0 ? '#f6c358' : '#ccc', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '4px', padding: '0.75rem', fontSize: '1rem', cursor: product.stock > 0 ? 'pointer' : 'not-allowed' }} 
-              onClick={() => addToCart({ id: product.id, title: product.name, price: (product.discount_price || product.price), image: product.images[0], color: selectedColor }, quantity)}
+              onClick={() => addToCart({ id: product.id, title: product.name, price: (product.discount_price ?? product.price), image: product.images[0], color: selectedColor }, quantity)}
             >
               {product.stock > 0 ? 'ADD TO CART' : 'OUT OF STOCK'}
             </button>
@@ -179,7 +182,7 @@ export default function ProductDetailPage() {
               type="button" 
               className={`btn btn--outline btn-wishlist ${inWishlist ? 'active' : ''}`} 
               style={{ padding: '0 1rem', border: 'none' }} 
-              onClick={() => toggleWishlist({ id: product.id, title: product.name, price: (product.discount_price || product.price), image: product.images[0] })}
+              onClick={() => toggleWishlist({ id: product.id, title: product.name, price: (product.discount_price ?? product.price), image: product.images[0] })}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill={inWishlist ? 'var(--color-accent)' : 'none'} stroke={inWishlist ? 'var(--color-accent)' : 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>

@@ -54,7 +54,7 @@ export default function CartPage() {
                         </div>
                       </td>
                       <td style={{ textAlign: 'right', color: 'var(--color-text-muted)' }}>
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{(item.price * item.quantity).toLocaleString('en-IN')}
                       </td>
                     </tr>
                   )
@@ -69,15 +69,15 @@ export default function CartPage() {
             <h2 className="cart-summary__title">Order Summary</h2>
             <div className="cart-summary__line">
               <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>₹{cartTotal.toLocaleString('en-IN')}</span>
             </div>
             <div className="cart-summary__line">
               <span>Shipping</span>
-              <span>$15.00</span>
+              <span>₹15.00</span>
             </div>
             <div className="cart-summary__total">
               <span>Total</span>
-              <span>${(cartTotal > 0 ? cartTotal + 15 : 0).toFixed(2)}</span>
+              <span>₹{(cartTotal > 0 ? cartTotal + 15 : 0).toLocaleString('en-IN')}</span>
             </div>
             {cart.length > 0 && (
               <Link href="/checkout" className="btn btn--primary" style={{ width: '100%', marginTop: '2rem', textAlign: 'center' }}>Proceed to Checkout</Link>

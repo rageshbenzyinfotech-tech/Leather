@@ -40,9 +40,17 @@ function ProductsContent() {
     });
 
     if (sort === 'price-asc') {
-      filtered.sort((a, b) => a.price - b.price);
+      filtered.sort((a, b) => {
+        const priceA = a.discount_price ?? a.price;
+        const priceB = b.discount_price ?? b.price;
+        return priceA - priceB;
+      });
     } else if (sort === 'price-desc') {
-      filtered.sort((a, b) => b.price - a.price);
+      filtered.sort((a, b) => {
+        const priceA = a.discount_price ?? a.price;
+        const priceB = b.discount_price ?? b.price;
+        return priceB - priceA;
+      });
     }
 
     setDisplayedProducts(filtered);
@@ -99,10 +107,13 @@ function ProductsContent() {
                   </div>
                   <div className="product-card__info">
                     <h3 className="product-card__title">{product.name}</h3>
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                      <p className="product-card__price">₹{product.price.toLocaleString('en-IN')}</p>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <p className="product-card__price">₹{(product.discount_price ?? product.price).toLocaleString('en-IN')}</p>
                       {product.discount_price && (
-                        <p className="product-card__price text-muted" style={{ textDecoration: 'line-through', fontSize: '0.8rem' }}>₹{product.discount_price.toLocaleString('en-IN')}</p>
+                        <>
+                          <p className="product-card__price text-muted" style={{ textDecoration: 'line-through', fontSize: '0.8rem' }}>₹{product.price.toLocaleString('en-IN')}</p>
+                          <p style={{ fontSize: '0.75rem', color: '#ff4d4d', fontWeight: '600' }}>{Math.round(((product.price - product.discount_price) / product.price) * 100)}% OFF</p>
+                        </>
                       )}
                     </div>
                   </div>
