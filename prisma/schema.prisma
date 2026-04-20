@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  SHIPPED
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role     @default(USER)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  carts         Cart[]
+  orders        Order[]
+  wishlists     Wishlist[]
+}
+
+model Product {
+  id             String   @id @default(uuid())
+  name           String
+  slug           String   @unique
+  description    String
+  price          Float
+  discount_price Float?
+  stock          Int
+  category       String
+  images         Json
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+  wishlists      Wishlist[]
+}
+
+model Cart {
+  id         String     @id @default(uuid())
+  user_id    String
+  user       User       @relation(fields: [user_id], references: [id])
+  created_at DateTime   @default(now())
+  items      CartItem[]
+}
+
+model CartItem {
+  id         String   @id @default(uuid())
+  cart_id    String
+  cart       Cart     @relation(fields: [cart_id], references: [id])
+  product_id String
+  product    Product  @relation(fields: [product_id], references: [id])
+  quantity   Int
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  user_id      String
+  user         User        @relation(fields: [user_id], references: [id])
+  total_amount Float
+  status       OrderStatus @default(PENDING)
+  payment_id   String?     // Razorpay payment ID
+  created_at   DateTime    @default(now())
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  order_id   String
+  order      Order   @relation(fields: [order_id], references: [id])
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+  price      Float
+  quantity   Int
+}
+
+model Wishlist {
+  id         String  @id @default(uuid())
+  user_id    String
+  user       User    @relation(fields: [user_id], references: [id])
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+}

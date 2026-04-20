@@ -8,7 +8,11 @@ import LoginModal from '@/components/LoginModal';
 export default function Header() {
   const [cartOpen, setCartOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-  const { cart, wishlist, removeFromCart, cartTotal, cartCount } = useStore();
+  const { cart, wishlist, removeFromCart, cartTotal, cartCount, user, logout } = useStore();
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <header className="header">
@@ -24,25 +28,25 @@ export default function Header() {
                   <div className="megamenu__sidebar">
                     <ul className="megamenu__categories">
                       <li>
-                        <Link href="/products" className="active">
+                        <Link href="/products?category=wallets" className="active">
                           Wallets
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/products">
+                        <Link href="/products?category=bags">
                           Bags
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/products">
+                        <Link href="/products?category=belts">
                           Belts
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/products">
+                        <Link href="/products?category=accessories">
                           Accessories
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </Link>
@@ -60,22 +64,22 @@ export default function Header() {
                       <Link href="/products/essential-slim-wallet" className="megamenu__product">
                         <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Slim Wallet" className="megamenu__product-image" />
                         <h4 className="megamenu__product-title">Slim Wallet</h4>
-                        <p className="megamenu__product-price">$65.00</p>
+                        <p className="megamenu__product-price">₹65</p>
                       </Link>
-                      <Link href="/products/essential-slim-wallet" className="megamenu__product">
-                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Cardholder" className="megamenu__product-image" />
+                      <Link href="/products/minimalist-cardholder" className="megamenu__product">
+                        <img src="https://images.unsplash.com/photo-1628149462153-29ecda955685?q=80&w=300&auto=format&fit=crop" alt="Cardholder" className="megamenu__product-image" />
                         <h4 className="megamenu__product-title">Cardholder</h4>
-                        <p className="megamenu__product-price">$45.00</p>
+                        <p className="megamenu__product-price">₹45</p>
                       </Link>
-                      <Link href="/products/essential-slim-wallet" className="megamenu__product">
-                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Folio Wallet" className="megamenu__product-image" />
-                        <h4 className="megamenu__product-title">Folio Wallet</h4>
-                        <p className="megamenu__product-price">$95.00</p>
+                      <Link href="/products/the-weekender" className="megamenu__product">
+                        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=300&auto=format&fit=crop" alt="Weekender Bag" className="megamenu__product-image" />
+                        <h4 className="megamenu__product-title">Weekender</h4>
+                        <p className="megamenu__product-price">₹345</p>
                       </Link>
-                      <Link href="/products/essential-slim-wallet" className="megamenu__product">
-                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=300&auto=format&fit=crop" alt="Bifold Wallet" className="megamenu__product-image" />
-                        <h4 className="megamenu__product-title">Bifold Wallet</h4>
-                        <p className="megamenu__product-price">$85.00</p>
+                      <Link href="/products/classic-leather-belt" className="megamenu__product">
+                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=300&auto=format&fit=crop" alt="Leather Belt" className="megamenu__product-image" />
+                        <h4 className="megamenu__product-title">Classic Belt</h4>
+                        <p className="megamenu__product-price">₹85</p>
                       </Link>
                     </div>
                   </div>
@@ -91,13 +95,36 @@ export default function Header() {
           <Link href="/wishlist" className="header__action-link" style={{ marginRight: '1rem' }}>
             Wishlist ({wishlist.length})
           </Link>
-          <button 
-            className="header__action-link" 
-            style={{ marginRight: '1rem' }}
-            onClick={() => setLoginOpen(true)}
-          >
-            Login
-          </button>
+
+          {user ? (
+            <>
+              <Link href="/orders" className="header__action-link" style={{ marginRight: '1rem' }}>
+                Orders
+              </Link>
+              {user.role === 'ADMIN' && (
+                <Link href="/admin" className="header__action-link" style={{ marginRight: '1rem', color: 'var(--color-accent)' }}>
+                  Admin
+                </Link>
+              )}
+              <button 
+                className="header__action-link" 
+                style={{ marginRight: '1rem' }}
+                onClick={handleLogout}
+                title={`Logged in as ${user.name}`}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button 
+              className="header__action-link" 
+              style={{ marginRight: '1rem' }}
+              onClick={() => setLoginOpen(true)}
+            >
+              Login
+            </button>
+          )}
+
           <button 
             className="header__action-link" 
             id="cart-toggle"
@@ -122,7 +149,7 @@ export default function Header() {
                     <img src={item.image} alt={item.title} className="cart-dropdown__item-image" />
                     <div className="cart-dropdown__item-info">
                       <h4 className="cart-dropdown__item-title">{item.title} {item.color ? `(${item.color})` : ''}</h4>
-                      <p className="cart-dropdown__item-price">{item.quantity} × ${item.price.toFixed(2)}</p>
+                      <p className="cart-dropdown__item-price">{item.quantity} × ₹{item.price.toLocaleString('en-IN')}</p>
                     </div>
                     <button className="cart-dropdown__item-remove" onClick={() => removeFromCart(item.id + (item.color ? '-' + item.color : ''))} aria-label="Remove item">Remove</button>
                   </div>
@@ -132,7 +159,7 @@ export default function Header() {
             <div className="cart-dropdown__footer">
               <div className="cart-dropdown__total">
                 <span>Subtotal</span>
-                <span className="cart-dropdown__total-price">${cartTotal.toFixed(2)}</span>
+                <span className="cart-dropdown__total-price">₹{cartTotal.toLocaleString('en-IN')}</span>
               </div>
               <Link href="/checkout" className="btn btn--primary" style={{ width: '100%', textAlign: 'center' }} onClick={() => setCartOpen(false)}>Checkout</Link>
             </div>

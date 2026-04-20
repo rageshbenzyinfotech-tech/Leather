@@ -11,27 +11,20 @@ export async function GET(req: Request) {
     const payload = verifyToken(token);
     if (!payload) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
 
-    // Admins can see all orders, users see their own
-    const whereClause = payload.role === 'ADMIN' ? {} : { user_id: payload.id };
-
-    const orders = await prisma.order.findMany({
-      where: whereClause,
+    const cart = await prisma.cart.findFirst({
+      where: { user_id: payload.id },
       include: {
         items: {
           include: {
             product: true
           }
-        },
-        user: {
-          select: { name: true, email: true }
         }
-      },
-      orderBy: { created_at: 'desc' }
+      }
     });
 
-    return NextResponse.json({ orders }, { status: 200 });
+    return NextResponse.json({ cart }, { status: 200 });
   } catch (error) {
-    console.error('Fetch Orders Error:', error);
+    console.error('Fetch Cart Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
