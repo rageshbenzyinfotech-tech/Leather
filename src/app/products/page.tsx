@@ -1,49 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-const products = [
-  {
-    id: 'essential-slim-wallet',
-    title: 'Essential Slim Wallet',
-    price: 65,
-    image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=600&auto=format&fit=crop',
-    colors: ['black', 'brown', 'tan'],
-    category: 'wallets'
-  },
-  {
-    id: 'the-weekender',
-    title: 'The Weekender',
-    price: 345,
-    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=600&auto=format&fit=crop',
-    colors: ['brown', 'black'],
-    category: 'bags'
-  },
-  {
-    id: 'classic-leather-belt',
-    title: 'Classic Leather Belt',
-    price: 85,
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop',
-    colors: ['black', 'tan'],
-    category: 'belts'
-  },
-  {
-    id: 'minimalist-cardholder',
-    title: 'Minimalist Cardholder',
-    price: 45,
-    image: 'https://images.unsplash.com/photo-1628149462153-29ecda955685?q=80&w=600&auto=format&fit=crop',
-    colors: ['tan', 'black', 'maroon', 'dual'],
-    category: 'wallets'
-  }
-];
-
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('default');
-  const [displayedProducts, setDisplayedProducts] = useState(products);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        setAllProducts(data.products || []);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const category = searchParams.get('category');
@@ -53,18 +35,34 @@ export default function ProductsPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    let filtered = products.filter(p => {
+    let filtered = allProducts.filter(p => {
       return filter === 'all' || p.category === filter;
     });
 
     if (sort === 'price-asc') {
-      filtered.sort((a, b) => a.price - b.price);
+      filtered.sort((a, b) => {
+        const priceA = a.discount_price ?? a.price;
+        const priceB = b.discount_price ?? b.price;
+        return priceA - priceB;
+      });
     } else if (sort === 'price-desc') {
-      filtered.sort((a, b) => b.price - a.price);
+      filtered.sort((a, b) => {
+        const priceA = a.discount_price ?? a.price;
+        const priceB = b.discount_price ?? b.price;
+        return priceB - priceA;
+      });
     }
 
     setDisplayedProducts(filtered);
-  }, [filter, sort]);
+  }, [filter, sort, allProducts]);
+
+  if (loading) {
+    return (
+      <div className="container" style={{ padding: '10rem 0', textAlign: 'center' }}>
+        <p className="page-subtitle">Curating products...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -99,28 +97,47 @@ export default function ProductsPage() {
         </aside>
 
         <div className="products__grid">
-          {displayedProducts.map((product) => (
-            <article key={product.id} className="product-card">
-              <Link href={`/products/${product.id}`} className="product-card__link">
-                <div className="product-card__image-wrapper">
-                  <img src={product.image} alt={product.title} className="product-card__image" loading="lazy" />
-                </div>
-                <div className="product-card__info">
-                  <h3 className="product-card__title">{product.title}</h3>
-                  <p className="product-card__price">${product.price}.00</p>
-                  {product.colors && (
-                    <div className="product-card__colors">
-                      {product.colors.map((color, index) => (
-                        <span key={color} className={`swatch swatch--${color} ${index === 0 ? 'is-active' : ''}`}></span>
-                      ))}
+          {displayedProducts.map((product) => {
+            const firstImage = product.images && product.images.length > 0 ? product.images[0] : '';
+            return (
+              <article key={product.id} className="product-card">
+                <Link href={`/products/${product.slug}`} className="product-card__link">
+                  <div className="product-card__image-wrapper">
+                    <img src={firstImage} alt={product.name} className="product-card__image" loading="lazy" />
+                  </div>
+                  <div className="product-card__info">
+                    <h3 className="product-card__title">{product.name}</h3>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <p className="product-card__price">₹{(product.discount_price ?? product.price).toLocaleString('en-IN')}</p>
+                      {product.discount_price && (
+                        <>
+                          <p className="product-card__price text-muted" style={{ textDecoration: 'line-through', fontSize: '0.8rem' }}>₹{product.price.toLocaleString('en-IN')}</p>
+                          <p style={{ fontSize: '0.75rem', color: '#ff4d4d', fontWeight: '600' }}>{Math.round(((product.price - product.discount_price) / product.price) * 100)}% OFF</p>
+                        </>
+                      )}
                     </div>
-                  )}
-                </div>
-              </Link>
-            </article>
-          ))}
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </section>
     </>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="page-header">
+        <div className="container">
+          <h1 className="page-title">The <span className="font-serif italic text-muted">Core</span> <span className="accent-color font-serif italic">Collection</span><span className="dot">.</span></h1>
+          <p className="page-subtitle">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   );
 }

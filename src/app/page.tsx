@@ -20,6 +20,7 @@ const products = [
     id: 'the-weekender',
     title: 'The Weekender',
     price: 345,
+    discount_price: 299,
     image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=600&auto=format&fit=crop',
     colors: ['brown', 'black'],
     category: 'bags'
@@ -36,6 +37,7 @@ const products = [
     id: 'minimalist-cardholder',
     title: 'Minimalist Cardholder',
     price: 45,
+    discount_price: 39,
     image: 'https://images.unsplash.com/photo-1628149462153-29ecda955685?q=80&w=600&auto=format&fit=crop',
     colors: ['tan', 'black', 'maroon', 'dual'],
     category: 'wallets'
@@ -178,7 +180,15 @@ export default function Home() {
                       </Link>
                       <div className="product-card__info">
                         <h3 className="product-card__title">{product.title}</h3>
-                        <p className="product-card__price">${product.price}.00</p>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                          <p className="product-card__price">₹{(product.discount_price ?? product.price).toLocaleString('en-IN')}</p>
+                          {product.discount_price && (
+                            <>
+                              <p className="product-card__price text-muted" style={{ textDecoration: 'line-through', fontSize: '0.8rem' }}>₹{product.price.toLocaleString('en-IN')}</p>
+                              <p style={{ fontSize: '0.75rem', color: '#ff4d4d', fontWeight: '600' }}>{Math.round(((product.price - product.discount_price) / product.price) * 100)}% OFF</p>
+                            </>
+                          )}
+                        </div>
                         {product.colors && (
                           <div className="product-card__colors">
                             {product.colors.map((color, index) => (

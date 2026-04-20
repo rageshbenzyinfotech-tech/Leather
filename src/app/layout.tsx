@@ -17,6 +17,7 @@ import '@/styles/cart.css';
 import '@/styles/checkout.css';
 import '@/styles/product-detail.css';
 import '@/styles/login-modal.css';
+import '@/styles/orders.css';
 
 export const metadata: Metadata = {
   title: 'Zerano | Crafted Leather',

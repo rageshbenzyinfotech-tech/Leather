@@ -6,25 +6,29 @@ import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    const { name, email, password } = await req.json();
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Missing email or password' }, { status: 400 });
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    if (existingUser) {
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    const password_hash = await bcrypt.hash(password, 10);
 
-    if (!isValidPassword) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
-    }
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password_hash,
+      },
+    });
 
     const token = signToken({
       id: user.id,
@@ -41,16 +45,16 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: 'Logged in successfully',
+      message: 'User registered successfully',
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
-    }, { status: 200 });
+    }, { status: 201 });
   } catch (error) {
-    console.error('Login Error:', error);
+    console.error('Registration Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

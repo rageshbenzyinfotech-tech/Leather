@@ -1,41 +1,37 @@
 import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { cookies } from 'next/headers';
+import { verifyToken } from '@/lib/auth';
 
-export async function POST(request: Request) {
+export async function GET(req: Request) {
   try {
-    const body = await request.json();
-    const { items, total_amount, shipping_address, customer } = body;
+    const token = (await cookies()).get('token')?.value;
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    if (!items || items.length === 0) {
-      return NextResponse.json(
-        { success: false, message: 'Cart is empty' },
-        { status: 400 }
-      );
-    }
+    const payload = verifyToken(token);
+    if (!payload) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
 
-    if (!shipping_address || !customer) {
-       return NextResponse.json(
-        { success: false, message: 'Missing shipping or customer details' },
-        { status: 400 }
-      );     
-    }
+    // Admins can see all orders, users see their own
+    const whereClause = payload.role === 'ADMIN' ? {} : { user_id: payload.id };
 
-    // Mock order creation
-    const orderId = `ORD-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
-
-    return NextResponse.json({
-      success: true,
-      message: 'Order created successfully',
-      order: {
-        id: orderId,
-        status: 'processing',
-        total_amount,
-        items_count: items.length
-      }
+    const orders = await prisma.order.findMany({
+      where: whereClause,
+      include: {
+        items: {
+          include: {
+            product: true
+          }
+        },
+        user: {
+          select: { name: true, email: true }
+        }
+      },
+      orderBy: { created_at: 'desc' }
     });
+
+    return NextResponse.json({ orders }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: 'Invalid request' },
-      { status: 400 }
-    );
+    console.error('Fetch Orders Error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

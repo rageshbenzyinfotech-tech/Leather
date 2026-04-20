@@ -11,15 +11,29 @@ type Product = {
   quantity?: number;
 };
 
-type CartItem = Product & { quantity: number };
+type CartItem = Product & { quantity: number, cart_item_id?: string };
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+} | null;
 
 type StoreContextType = {
   cart: CartItem[];
   wishlist: Product[];
+  user: User;
+  isAuthLoading: boolean;
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (cartId: string) => void;
   updateQuantity: (cartId: string, quantity: number) => void;
   toggleWishlist: (product: Product) => void;
+  clearCart: () => void;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   cartTotal: number;
   cartCount: number;
 };
@@ -29,14 +43,20 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [user, setUser] = useState<User>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
+  // Check auth on mount
   useEffect(() => {
     setIsMounted(true);
     const savedCart = localStorage.getItem('zerano_cart_next');
     const savedWishlist = localStorage.getItem('zerano_wishlist_next');
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
+
+    // Check if user is logged in
+    refreshUser();
   }, []);
 
   useEffect(() => {
@@ -46,7 +66,98 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [cart, wishlist, isMounted]);
 
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const refreshUser = async () => {
+    setIsAuthLoading(true);
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    } catch {
+      setUser(null);
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  const fetchCart = async () => {
+    try {
+      const res = await fetch('/api/cart');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.cart && data.cart.items) {
+          const dbCart = data.cart.items.map((item: any) => ({
+            id: item.product.id,
+            title: item.product.name,
+            price: item.product.discount_price ?? item.product.price,
+            image: Array.isArray(item.product.images) ? item.product.images[0] : JSON.parse(item.product.images as string)[0],
+            quantity: item.quantity,
+            cart_item_id: item.id
+          }));
+          setCart(dbCart);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    }
+  }, [user]);
+
+  const login = async (email: string, password: string) => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(data.user);
+        return { success: true };
+      }
+      return { success: false, error: data.error || 'Login failed' };
+    } catch {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(data.user);
+        return { success: true };
+      }
+      return { success: false, error: data.error || 'Registration failed' };
+    } catch {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // ignore
+    }
+    setUser(null);
+  };
+
+  const addToCart = async (product: Product, quantity: number = 1) => {
+    // Optimistic update
     setCart((prev) => {
       const existingIndex = prev.findIndex((item) => item.id === product.id && item.color === product.color);
       if (existingIndex > -1) {
@@ -56,36 +167,112 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...product, quantity }];
     });
-    alert('Added to Cart'); // Basic toast
+
+    // If user is logged in, sync with DB
+    if (user) {
+      try {
+        await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_id: product.id, quantity }),
+        });
+        // We might want to re-fetch to get the cart_item_id from DB
+        fetchCart();
+      } catch (error) {
+        console.error('Error adding to DB cart:', error);
+      }
+    }
   };
 
-  const removeFromCart = (cartId: string) => {
-    setCart((prev) => prev.filter((item, i) => i.toString() !== cartId && `${item.id}-${item.color}` !== cartId));
+  const removeFromCart = async (cartId: string) => {
+    const itemToRemove = cart.find((item, i) => 
+      i.toString() === cartId || 
+      item.id === cartId || 
+      `${item.id}-${item.color}` === cartId || 
+      item.cart_item_id === cartId
+    );
+    
+    setCart((prev) => prev.filter((item, i) => 
+      i.toString() !== cartId && 
+      item.id !== cartId && 
+      `${item.id}-${item.color}` !== cartId && 
+      item.cart_item_id !== cartId
+    ));
+
+    if (user && itemToRemove?.cart_item_id) {
+      try {
+        await fetch('/api/cart/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cart_item_id: itemToRemove.cart_item_id }),
+        });
+      } catch (error) {
+        console.error('Error removing from DB cart:', error);
+      }
+    }
   };
 
-  const updateQuantity = (cartId: string, quantity: number) => {
+  const updateQuantity = async (cartId: string, quantity: number) => {
+    let affectedItem: CartItem | undefined;
+    
     setCart((prev) => {
-      const existingIndex = prev.findIndex((item, i) => i.toString() === cartId || `${item.id}-${item.color}` === cartId);
+      const existingIndex = prev.findIndex((item, i) => 
+        i.toString() === cartId || 
+        item.id === cartId || 
+        `${item.id}-${item.color}` === cartId || 
+        item.cart_item_id === cartId
+      );
       if (existingIndex > -1) {
         const newCart = [...prev];
-        newCart[existingIndex].quantity += quantity;
-        if (newCart[existingIndex].quantity <= 0) {
+        const updatedItem = { ...newCart[existingIndex] };
+        updatedItem.quantity += quantity;
+        newCart[existingIndex] = updatedItem;
+        affectedItem = updatedItem;
+        
+        if (updatedItem.quantity <= 0) {
           newCart.splice(existingIndex, 1);
         }
         return newCart;
       }
       return prev;
     });
+
+    if (user && affectedItem?.cart_item_id) {
+      try {
+        const newQuantity = affectedItem.quantity;
+        await fetch('/api/cart/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            cart_item_id: affectedItem.cart_item_id, 
+            quantity: newQuantity 
+          }),
+        });
+      } catch (error) {
+        console.error('Error updating DB cart:', error);
+      }
+    }
+  };
+
+  const clearCart = async () => {
+    setCart([]);
+    localStorage.removeItem('zerano_cart_next');
+
+    if (user) {
+      try {
+        await fetch('/api/cart', { method: 'DELETE' });
+      } catch (error) {
+        console.error('Error clearing DB cart:', error);
+      }
+    }
   };
 
   const toggleWishlist = (product: Product) => {
     setWishlist((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        alert('Removed from Wishlist');
         return prev.filter((item) => item.id !== product.id);
       }
-      alert('Added to Wishlist');
       return [...prev, product];
     });
   };
@@ -94,7 +281,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   return (
-    <StoreContext.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQuantity, toggleWishlist, cartTotal, cartCount }}>
+    <StoreContext.Provider value={{
+      cart, wishlist, user, isAuthLoading,
+      addToCart, removeFromCart, updateQuantity, toggleWishlist, clearCart,
+      login, register, logout, refreshUser,
+      cartTotal, cartCount
+    }}>
       {children}
     </StoreContext.Provider>
   );
