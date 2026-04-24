@@ -1,0 +1,13 @@
+Read AGENTS.md and the .ai/ directory for project context before making changes.
+
+## Critical Rules
+1. Always use Prisma for all database queries — never write raw SQL
+2. Never expose secrets in client-side code; use `NEXT_PUBLIC_` prefix only for public keys
+3. Verify JWT via `jose` in middleware (Edge runtime) and via `jsonwebtoken` in API routes (Node runtime)
+4. Admin routes must validate `role === 'ADMIN'` from the JWT payload
+5. Use `@/` path alias for all imports (`@/` maps to `./src/`)
+6. CSS is vanilla CSS with BEM naming — do not introduce Tailwind or CSS-in-JS
+7. All product prices use `Float` type; `discount_price` is nullable
+8. Optimistic UI for cart — update state immediately, sync to DB in background
+9. Slugs are unique — always use `slug` for product URLs, never UUID
+10. Stock must be checked before checkout and deducted after successful payment
